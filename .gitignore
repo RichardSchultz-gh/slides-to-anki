@@ -1,0 +1,18 @@
+# Python
+__pycache__/
+*.pyc
+.venv/
+.pytest_cache/
+.ruff_cache/
+
+# Node
+node_modules/
+dist/
+
+# Secrets / lokale Konfiguration
+.env
+.claude/settings.local.json
+
+# Lokale Foliensätze (nie echte Uni-Folien committen, siehe CLAUDE.md)
+uploads/
+*.pdf
