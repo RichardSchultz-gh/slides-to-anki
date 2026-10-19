@@ -15,6 +15,8 @@ welche Aufgaben die KI übernimmt und wie die Ergebnisse überprüft werden.
   - `prd-to-issues`: ein PRD in einzeln umsetzbare Issues zerlegen (`issues/`)
   - `tdd`: Umsetzung nach Red-Green-Refactor
   - `grill-me`: einen Plan kritisch hinterfragen lassen, bevor er umgesetzt wird
+  - `devlog` (projekteigen, `.claude/skills/devlog/`): Devlog-Eintrag am Ende einer Session;
+    Claude schreibt den sachlichen Teil und interviewt mich für die Reflexionsabschnitte
 
 ## Ablauf
 
