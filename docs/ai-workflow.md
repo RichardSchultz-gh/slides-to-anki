@@ -47,7 +47,7 @@ welche Aufgaben die KI übernimmt und wie die Ergebnisse überprüft werden.
 | Architektur & Stack | entscheide | schlägt Optionen vor, bewertet Trade-offs |
 | Implementierung | je nach Stufe (siehe unten) | je nach Stufe (siehe unten) |
 | Tests | formuliere Testfälle, prüfe Aussagekraft | schreibt Tests aus |
-| Dokumentation | Reflexion, Entscheidungen | Gerüste, sachliche Zusammenfassungen |
+| Dokumentation | Inhalt von Reflexion und Entscheidungen, Gegenlesen | Gerüste, sachliche Zusammenfassungen, Formulierung aus meinen Stichpunkten |
 
 ## Delegationsstufen
 
@@ -83,8 +83,18 @@ reviewen. Die KI dient hier als Tutor, nicht als Autor.
 
 Pro Session oder Meilenstein gibt es einen kurzen Eintrag unter
 `docs/devlog/YYYY-MM-DD-<thema>.md`. Er wird direkt nach der Session geschrieben und kostet etwa
-10–15 Minuten. Den sachlichen Teil darf Claude vorformulieren. Die Abschnitte zu Entscheidungen,
-Fehlern der KI und Learnings schreibe ich selbst.
+10–15 Minuten. Den sachlichen Teil darf Claude vorformulieren.
+
+Für die Abschnitte zu Entscheidungen, Fehlern der KI und Learnings gilt: **Der Inhalt kommt von
+mir, die Formulierung darf von Claude kommen.**
+1. Ich schreibe Stichpunkte, schnell und unformuliert.
+2. Claude formuliert daraus den Text. Eigene Ergänzungen schlägt Claude nur vor, wenn sie belegbar
+   sind (z. B. Testergebnisse), und kennzeichnet sie als Vorschlag.
+3. Ich lese gegen und streiche, was nicht stimmt oder nicht meins ist.
+
+Claude erfindet keine Reflexionen ohne meine Stichpunkte. Nur ich weiß, was ich tatsächlich
+entschieden und gelernt habe, und muss es im Gespräch aus eigener Erinnerung erzählen können.
+Die KI als Schreibhilfe zu nutzen, passt dagegen zum Projekt, solange es offen dokumentiert ist.
 
 Vorlage:
 

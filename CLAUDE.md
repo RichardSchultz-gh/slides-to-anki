@@ -108,13 +108,19 @@ einfacher und das Python-Backend zur Zielrolle "Web mit KI" passt.
 - `docs/devlog/YYYY-MM-DD-<thema>.md` — kurzer Eintrag pro Session/Meilenstein (Vorlage in
   `docs/ai-workflow.md`)
 
-Am Ende einer Session darf Claude den sachlichen Teil eines Devlog-Eintrags vorformulieren;
-die Abschnitte "Was ich entschieden/korrigiert habe", "Wo die KI danebenlag" und "Learning"
-schreibt der User selbst.
+Am Ende einer Session darf Claude den sachlichen Teil eines Devlog-Eintrags vorformulieren.
+Für die Abschnitte "Was ich entschieden/korrigiert habe", "Wo die KI danebenlag" und "Learning"
+gilt: **Inhalt vom User, Formulierung darf von Claude kommen.**
+1. Der User liefert Stichpunkte (unformuliert reicht).
+2. Claude formuliert daraus den Text. Eigene Ergänzungen nur, wenn sie belegbar sind (z. B.
+   Testergebnisse, Befunde aus der Session), und als Vorschlag gekennzeichnet.
+3. Der User liest gegen und streicht, was nicht stimmt oder nicht seins ist.
+Claude erfindet keine Reflexionen ohne Stichpunkte des Users. Fehlen sie, fragt Claude danach.
 **Warum**: Im Portfolio soll nachvollziehbar sein, *wo* der User die KI gesteuert, korrigiert
 und überprüft hat — nicht nur, dass KI benutzt wurde. Laufende kurze Einträge sind glaubwürdiger
-und detailreicher als eine rückblickende Zusammenfassung; selbst geschriebene Reflexion bleibt
-authentisch.
+und detailreicher als eine rückblickende Zusammenfassung. Nur der User weiß, was er tatsächlich
+entschieden und gelernt hat, und muss es im Gespräch aus eigener Erinnerung erzählen können; die
+Formulierung abzugeben spart dagegen Zeit für den Web-Schwerpunkt, ohne die Echtheit zu gefährden.
 
 ## Website-Features (priorisiert)
 
