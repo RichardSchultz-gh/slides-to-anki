@@ -101,6 +101,21 @@ Postgres deckt DB, Volltextsuche, Vektoren und Queue ab — eine Infrastruktur-K
 vier. Bewusst gegen TS-Fullstack (eine Sprache) entschieden, weil die KI-/PDF-Teile in Python
 einfacher und das Python-Backend zur Zielrolle "Web mit KI" passt.
 
+### Doku-Struktur: AI-assisted Entwicklung sichtbar machen
+- `README.md` — Kurzüberblick für Recruiter (Was, Stack, Starten), verlinkt auf `docs/`
+- `CLAUDE.md` — Architektur, Konventionen, Entscheidungen mit "Warum"
+- `docs/ai-workflow.md` — wie das Projekt mit KI-Unterstützung entwickelt wird (Ablauf, Regeln)
+- `docs/devlog/YYYY-MM-DD-<thema>.md` — kurzer Eintrag pro Session/Meilenstein (Vorlage in
+  `docs/ai-workflow.md`)
+
+Am Ende einer Session darf Claude den sachlichen Teil eines Devlog-Eintrags vorformulieren;
+die Abschnitte "Was ich entschieden/korrigiert habe", "Wo die KI danebenlag" und "Learning"
+schreibt der User selbst.
+**Warum**: Im Portfolio soll nachvollziehbar sein, *wo* der User die KI gesteuert, korrigiert
+und überprüft hat — nicht nur, dass KI benutzt wurde. Laufende kurze Einträge sind glaubwürdiger
+und detailreicher als eine rückblickende Zusammenfassung; selbst geschriebene Reflexion bleibt
+authentisch.
+
 ## Website-Features (priorisiert)
 
 1. **Google Drive Integration + Async Processing mit Live-Status**: Eigener Webhook-Listener
