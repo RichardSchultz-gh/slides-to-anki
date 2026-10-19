@@ -5,6 +5,14 @@ Durchsuchen und Lernen (Spaced Repetition), inkl. Qualitätsmessung gegen ein Go
 
 > In Arbeit. Architektur und Entscheidungen: siehe [CLAUDE.md](CLAUDE.md).
 
+## Wie dieses Projekt entsteht
+
+Das Projekt wird mit [Claude Code](https://claude.com/claude-code) als KI-Assistent entwickelt.
+Wie die Arbeit zwischen mir und der KI aufgeteilt ist, welche Teile ich selbst schreibe und wie
+KI-generierter Code überprüft wird, steht in [docs/ai-workflow.md](docs/ai-workflow.md). Was in
+den einzelnen Sessions passiert ist, inklusive der Stellen, an denen die KI danebenlag, steht im
+[Devlog](docs/devlog/).
+
 ## Stack
 
 | Teil     | Technik                                        |

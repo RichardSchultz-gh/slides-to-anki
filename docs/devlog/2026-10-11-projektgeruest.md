@@ -35,6 +35,9 @@ Bei der Überprüfung des Gerüsts sind mir drei Schwachstellen im generierten C
 - Der Health-Endpunkt antwortet auch bei gestoppter Datenbank mit `200`, nur mit
   `"database": false` im JSON. Docker-Healthchecks und Monitoring prüfen meist nur den
   Statuscode und würden den Ausfall nicht erkennen. Üblich wäre `503`.
+  *Präzisiert im Eintrag vom 2026-10-19: Das alte Verhalten war ein sinnvoller
+  Liveness-Check und wurde um einen Readiness-Check ergänzt, statt durch `503` ersetzt
+  ([2026-10-19-doku-und-health-check.md](2026-10-19-doku-und-health-check.md)).*
 - Der Test `test_health_responds_even_without_database` verspricht im Namen, das Verhalten ohne
   Datenbank zu prüfen. Tatsächlich läuft er gegen die echte Datenbank, falls sie gestartet ist,
   und prüft das Feld `database` gar nicht.
