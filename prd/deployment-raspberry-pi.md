@@ -102,8 +102,9 @@ einen Pi 5 um.
     Startbefehl laufen, damit es nur ein Backend-Image zu pflegen gibt.
 25. Als Entwickler möchte ich eine von der lokalen Entwicklung getrennte Compose-Konfiguration für
     die Produktion, damit lokale Einstellungen nicht versehentlich live gehen.
-26. Als Entwickler möchte ich, dass der Health-Endpunkt bei nicht erreichbarer Datenbank `503`
-    zurückgibt, damit Docker-Healthchecks und externes Monitoring den Ausfall erkennen.
+26. Als Entwickler möchte ich getrennte Health-Endpunkte für Liveness (Prozess lebt, ohne DB) und
+    Readiness (DB erreichbar, sonst `503`), damit Monitoring den DB-Ausfall erkennt, ohne dass ein
+    Neustart-Mechanismus die App sinnlos neu startet. (Bereits umgesetzt am 2026-10-19.)
 27. Als Entwickler möchte ich, dass Secrets (API-Key, Admin-Passwort, DB-Passwort) nur in einer
     Umgebungsdatei auf dem Pi liegen und nie im Repo, damit sie nicht öffentlich werden.
 28. Als Entwickler möchte ich, dass gehashte Frontend-Dateien lange gecacht werden und die
@@ -150,14 +151,14 @@ einen Pi 5 um.
   Ablage außerhalb des Pi. Wiederherstellung wird einmal vollständig getestet.
 - **Demo-Daten**: Beispiel-Decks werden einmal über die echte Pipeline aus eigenen oder
   CC-lizenzierten Folien erzeugt. Ein Dump davon dient zur Wiederherstellung.
-- **Monitoring**: externer, kostenloser Uptime-Check gegen den Health-Endpunkt mit
+- **Monitoring**: externer, kostenloser Uptime-Check gegen den Readiness-Endpunkt mit
   Benachrichtigung per E-Mail.
 - **Deployment**: manuell (neue Images ziehen, Compose neu starten). Ablauf ist in einer
   Deployment-Anleitung im Repo dokumentiert.
 
-### Health-Endpunkt
-- Gibt `503` zurück, wenn die Datenbank nicht erreichbar ist, sonst `200`. Antwortformat bleibt
-  gleich.
+### Health-Endpunkte (bereits umgesetzt)
+- `/api/health/live`: immer `200`, ohne DB-Abfrage. Für Docker-Healthcheck/Neustart-Mechanismen.
+- `/api/health/ready`: `200`, wenn die DB erreichbar ist, sonst `503`. Für den Uptime-Check.
 
 ## Testing Decisions
 
@@ -169,11 +170,11 @@ einen Pi 5 um.
   Fehlerformat; mit gültiger Session funktionieren sie; lesende Endpunkte sind ohne Session
   erreichbar; falsches Passwort ergibt keinen Login; manipuliertes Cookie wird abgelehnt; Bremse
   greift nach wiederholten Fehlversuchen.
-- **Health-Endpunkt**: `200` mit erreichbarer DB, `503` ohne. Der bestehende Test, dessen Name
-  „ohne Datenbank“ verspricht, das aber nicht prüft, wird dabei korrigiert.
+- **Health-Endpunkte**: bereits umgesetzt und getestet (Liveness ohne DB; Readiness `200`/`503`
+  mit ersetzter DB-Session).
 
 **Manueller Smoke-Test nach jedem Deployment** (als Checkliste in der Deployment-Anleitung):
-- Health-Endpunkt über die öffentliche Domain liefert `200`.
+- Readiness-Endpunkt über die öffentliche Domain liefert `200`.
 - Direktaufruf einer Unterseite liefert die App (SPA-Fallback).
 - Upload ohne Login wird abgelehnt.
 - Nach Login funktioniert ein Upload eines kleinen Test-PDFs.

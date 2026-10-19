@@ -1,6 +1,6 @@
-from typing import Annotated
+from typing import Annotated, Literal
 
-from fastapi import Depends, FastAPI
+from fastapi import Depends, FastAPI, Response, status
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 from sqlalchemy import text
@@ -20,16 +20,34 @@ app.add_middleware(
 )
 
 
-class Health(BaseModel):
-    status: str
+class Liveness(BaseModel):
+    status: Literal["ok"]
+
+
+class Readiness(BaseModel):
+    status: Literal["ok", "unavailable"]
     database: bool
 
 
-@app.get("/api/health")
-async def health(session: Annotated[AsyncSession, Depends(get_session)]) -> Health:
+# Liveness ("lebt der Prozess?") hängt bewusst nicht von der DB ab: Ein Neustart der App
+# behebt keinen DB-Ausfall und würde nur eine Neustart-Schleife auslösen.
+@app.get("/api/health/live")
+async def live() -> Liveness:
+    return Liveness(status="ok")
+
+
+# Readiness ("kann die App gerade arbeiten?") für Uptime-Monitore und Load-Balancer, die nur
+# den Statuscode auswerten.
+@app.get(
+    "/api/health/ready",
+    responses={status.HTTP_503_SERVICE_UNAVAILABLE: {"model": Readiness}},
+)
+async def ready(
+    session: Annotated[AsyncSession, Depends(get_session)], response: Response
+) -> Readiness:
     try:
         await session.execute(text("SELECT 1"))
-        db_ok = True
     except SQLAlchemyError:
-        db_ok = False
-    return Health(status="ok", database=db_ok)
+        response.status_code = status.HTTP_503_SERVICE_UNAVAILABLE
+        return Readiness(status="unavailable", database=False)
+    return Readiness(status="ok", database=True)

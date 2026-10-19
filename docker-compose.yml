@@ -6,7 +6,9 @@ services:
       POSTGRES_PASSWORD: anki
       POSTGRES_DB: anki
     ports:
-      - "5432:5432"
+      # Nur lokal erreichbar: Docker umgeht unter Linux Firewall-Regeln (z. B. ufw) für
+      # veröffentlichte Ports, ohne 127.0.0.1 wäre die DB im ganzen Netzwerk offen.
+      - "127.0.0.1:5432:5432"
     volumes:
       - pgdata:/var/lib/postgresql/data
     healthcheck:
