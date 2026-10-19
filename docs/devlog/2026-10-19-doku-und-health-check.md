@@ -19,7 +19,7 @@ Schwachstellen beheben.
 - README um einen Abschnitt „Wie dieses Projekt entsteht“ mit Verweis auf `docs/ai-workflow.md`
   und den Devlog ergänzt
 
-Commits: `2543ac2`, `3171d9c`, `d8bafb6`, `1aae1c0`
+Commits: `f41989b`, `ac9b259`, `c2e8829`, `665272c`
 
 **Was ich entschieden/korrigiert habe:**
 Claude hatte vorgeschlagen, den Health-Endpunkt bei fehlender Datenbank einfach auf `503`

@@ -15,7 +15,7 @@ Features aufbauen können, und den ersten Meilenstein planen.
 - PRD für Meilenstein 1 (`prd/m1-upload-generierung.md`): PDF-Upload, Karten-Generierung als
   Hintergrund-Job, inkrementelle Updates über Seiten-Hashes, Kartenliste
 
-Commit: `ee65810`
+Commit: `21c6957`
 
 **Was ich entschieden/korrigiert habe:**
 Ich stand vor der Wahl zwischen TypeScript als Fullstack und einem Python-Backend. Am 2026-10-19
