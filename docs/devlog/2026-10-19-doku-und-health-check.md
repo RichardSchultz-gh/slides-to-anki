@@ -70,4 +70,5 @@ Umgesetzt wurde deshalb die Trennung in `live` und `ready` statt des ursprüngli
 
 **Offen:**
 - Ein Verbindungs-Timeout für die Datenbank ist nicht gesetzt. Bei einer hängenden statt
-  abgelehnten Verbindung würde `ready` warten (relevant fürs Deployment).
+  abgelehnten Verbindung würde `ready` warten (relevant fürs Deployment). Erfasst als
+  `issues/001-db-verbindungs-timeout.md`.

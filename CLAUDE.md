@@ -60,13 +60,17 @@ werden.
 ### Google Drive Integration direkt, nicht über MCP
 Foliensätze werden automatisch nach Google Drive gebackupt. Statt diese per MCP (Model Context
 Protocol) an die API durchzureichen, baut das eigene Backend eine direkte Google Drive API
-Integration (OAuth2/Service-Account) mit Push-Notification-Webhook (Fallback: Polling), die neue
-Dateien erkennt und den Verarbeitungs-Job auslöst.
+Integration (OAuth2/Service-Account), die neue Dateien erkennt und den Verarbeitungs-Job auslöst.
+Reihenfolge: zuerst manueller Upload (Meilenstein 1), dann Erkennung per **Polling** der Drive-API,
+Push-Notification-Webhook nur optional, falls am Ende noch Zeit bleibt.
 **Warum**: MCP ist ein Protokoll, um KI-Assistenten mit Tools zu verbinden — nicht der übliche
 Baustein für den Backend-Service einer Web-App. Es per MCP zu lösen, würde eine fertige
 Integration nutzen statt selbst eine zu bauen, und würde damit den gewollten Web-Dev-Tiefe-Punkt
 (eigene Auth-/Webhook-/Fehlerbehandlung) wieder verwässern — genau der Effekt, den der
 Rollen-Fokus auf Web vermeiden soll.
+**Warum Polling vor Webhook**: Ein Drive-Webhook braucht eine öffentlich erreichbare HTTPS-URL
+(Deployment oder Tunnel), und die Watch-Channels laufen ab und müssen erneuert werden. Polling ist
+robuster, funktioniert auch lokal und ist trotzdem eine eigene API-Integration mit OAuth.
 
 ### Umgang mit echten Uni-Folien (Datenschutz/Urheberrecht)
 Echte eigene Uni-Foliensätze dürfen privat zum Testen über die LLM-API verarbeitet werden
@@ -94,12 +98,36 @@ Mehrwert für den Web-Schwerpunkt.
 - **Live-Status**: Server-Sent Events
 - **API-Vertrag**: TS-Typen werden per `openapi-typescript` aus dem FastAPI-OpenAPI-Schema generiert
 
-**Warum**: Python dort, wo es Vorteile hat (PDF-Extraktion, LLM-SDKs, Embeddings/numpy für die
-Eval), TypeScript dort, wo es Standard ist (Browser-UI). Die Sprachgrenze erzwingt eine saubere
-REST-Schnittstelle; generierte Typen verhindern, dass Frontend und Backend auseinanderlaufen.
-Postgres deckt DB, Volltextsuche, Vektoren und Queue ab — eine Infrastruktur-Komponente statt
-vier. Bewusst gegen TS-Fullstack (eine Sprache) entschieden, weil die KI-/PDF-Teile in Python
-einfacher und das Python-Backend zur Zielrolle "Web mit KI" passt.
+**Warum**: Python dort, wo es Vorteile hat, TypeScript dort, wo es Standard ist (Browser-UI). Die
+Sprachgrenze erzwingt eine saubere REST-Schnittstelle; generierte Typen verhindern, dass Frontend
+und Backend auseinanderlaufen. Postgres deckt DB, Volltextsuche, Vektoren und Queue ab — eine
+Infrastruktur-Komponente statt vier.
+
+**Warum nicht TS-Fullstack** (am 2026-10-19 nochmals abgewogen und bestätigt): TS-Fullstack hätte
+echte Vorteile (eine Sprache, geteilte Typen ohne Codegenerierung, z. B. per tRPC). Ausschlaggebend
+für Python waren:
+- **PyMuPDF** ist für Text pro Seite, Grafikerkennung und Rendering ausgereifter als die
+  JS-Alternativen, mit deutlich mehr Erfahrungswerten.
+- **`genanki`** für den `.apkg`-Export ist in Python etabliert und gepflegt; die JS-Alternativen
+  sind veraltet.
+- Die Teile, die der User selbst schreiben will (Delegationsstufe 3, siehe `docs/ai-workflow.md`),
+  liegen fast alle im Backend. Der User kennt Python aus dem Studium und lernt TypeScript im
+  Frontend; zwei neue Ökosysteme gleichzeitig würden mehr Delegation an die KI erzwingen.
+- Für ein "Web mit KI"-Profil zeigen zwei Sprachen mit sauberer Schnittstelle eher mehr Breite.
+
+Kein Grund ist dagegen die Eval: Embeddings kommen per API, der Vergleich läuft über pgvector,
+numpy wird dafür nicht gebraucht.
+
+### Bausteine erst bei Bedarf einführen
+Neue Bibliotheken, Dienste oder Infrastruktur (z. B. SSE, pgvector-Nutzung, Drive-Webhook) kommen
+erst ins Projekt, wenn ein konkretes Problem sie erfordert. Was ein PRD für einen Meilenstein
+bereits festlegt, gilt als begründet.
+Claude schlägt keine Extras "für später" vor und fügt keine neuen Dependencies ohne Rückfrage hinzu.
+Bewusst nicht vorgesehen: Redis, Microservices, Kubernetes, GraphQL, separate Vector-DB, Redux.
+**Warum**: Jeder Baustein muss im Gespräch mit einem echten Problem begründbar sein ("die
+Generierung dauerte zu lange, deshalb Hintergrund-Job"). Vorsorglich eingebaute Bausteine sind
+schwer zu begründen, kosten Zeit und machen das Projekt schwerer erklärbar. KI-Assistenten neigen
+dazu, zu viel einzubauen — die Regel ist die Leitplanke dagegen.
 
 ### Doku-Struktur: AI-assisted Entwicklung sichtbar machen
 - `README.md` — Kurzüberblick für Recruiter (Was, Stack, Starten), verlinkt auf `docs/`
@@ -124,8 +152,9 @@ Formulierung abzugeben spart dagegen Zeit für den Web-Schwerpunkt, ohne die Ech
 
 ## Website-Features (priorisiert)
 
-1. **Google Drive Integration + Async Processing mit Live-Status**: Eigener Webhook-Listener
-   für neue Dateien in Drive (OAuth2/Service-Account), Verarbeitung als Hintergrund-Job (Queue),
+1. **Google Drive Integration + Async Processing mit Live-Status**: Eigene Erkennung neuer
+   Dateien in Drive (OAuth2/Service-Account, Polling; Webhook optional, siehe Entscheidung
+   oben), Verarbeitung als Hintergrund-Job (Queue),
    Live-Fortschritt in der UI (SSE/WebSockets). Zeigt Umgang mit asynchronen Prozessen,
    Echtzeit-Updates und eigener Drittanbieter-API-Integration.
 2. **Human-in-the-loop Review-UI**: Generierte Karten landen zunächst in einem Review-Status;

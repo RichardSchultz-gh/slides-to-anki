@@ -1,4 +1,4 @@
-# Anki-KI
+# slides-to-anki
 
 Foliensätze (PDF) aus Google Drive → per LLM generierte Lernkarten → Web-App zum Reviewen,
 Durchsuchen und Lernen (Spaced Repetition), inkl. Qualitätsmessung gegen ein Gold-Set.
